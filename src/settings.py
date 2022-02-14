@@ -1,5 +1,7 @@
 import os
 
+APP_ORIGIN = os.environ.get("APP_ORIGIN") # localhost or site
+
 if hostname := os.environ.get("RDS_HOSTNAME"):
     # When running on Beanstalk, it automatically sets all these values for the attached RDS:
     username = os.environ["RDS_USERNAME"]

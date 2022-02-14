@@ -6,6 +6,8 @@ from sqlalchemy.dialects.postgresql import JSON
 
 from .app import app
 
+from uuid import uuid4
+
 db = SQLAlchemy(app)
 
 
@@ -16,6 +18,6 @@ class UUID(TypeDecorator):
 class DataFile(db.Model):
     __tablename__ = "data_files"
 
-    id = Column(UUID, primary_key=True)
+    id = Column(UUID, primary_key=True, default=uuid4)
     json_body = Column(JSON, nullable=False)
     secret_token = Column(Text, nullable=False)
