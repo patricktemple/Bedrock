@@ -36,6 +36,12 @@ script/run
 
 Then just visit `http://localhost` in your browser.
 
+## Running tests
+
+```bash
+pytest -vs
+```
+
 ## Formatting
 Run `fourmat` to autoformat the Python code.
 

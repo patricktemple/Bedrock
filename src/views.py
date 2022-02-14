@@ -3,8 +3,11 @@ from .app import app
 
 from werkzeug import exceptions
 
-from flask import render_template, request, jsonify
+import logging
+
+from flask import render_template, request
 import secrets
+import json
 
 from .models import DataFile, db
 
@@ -35,13 +38,16 @@ def get_file(file_id):
 @app.route("/upload", methods=["POST"])
 def upload_file():
     data = request.files['json_file']
-    data_str = data.read().decode('utf-8')
-    # TODO: Validate it
+    try:
+        # TODO: Validate that the field structure matches expectations
+        data_str = data.read().decode('utf-8')
+        json.loads(data_str)
+    except json.JSONDecodeError:
+        logging.exception("JSON decode error on file upload")
+        return render_template("upload_failure.html"), 400
 
     data_file = DataFile(json_body=data_str, secret_token=secrets.token_urlsafe())
     db.session.add(data_file)
     db.session.commit()
 
-    file_id = data_file.id
-
-    return render_template("upload_success.html", file_url=f"{APP_ORIGIN}/file/{file_id}?token={data_file.secret_token}")
+    return render_template("upload_success.html", file_url=f"{APP_ORIGIN}/file/{data_file.id}?token={data_file.secret_token}")

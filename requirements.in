@@ -4,5 +4,6 @@ fourmat
 alembic
 flask
 flask_sqlalchemy
+marshmallow_sqlalchemy
 psycopg2
 pytest
