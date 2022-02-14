@@ -15,6 +15,13 @@ class UUID(TypeDecorator):
 
 
 class DataFile(db.Model):
+    """
+    A single JSON data file that has been uploaded by a user to
+    share via link. It's stored opaquely as JSON as we expect the
+    format to change flexibly, and the internal application logic
+    is not concerned with the contents.
+    """
+
     __tablename__ = "data_files"
 
     id = Column(UUID, primary_key=True, default=uuid4)

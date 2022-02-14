@@ -25,7 +25,12 @@ def autouse_fixtures():
 
 
 def test_upload_file(client):
-    data = {"json_file": (io.BytesIO(b'{"key": 3}'), "test.json")}
+    data = {
+        "json_file": (
+            io.BytesIO(b"timestamp,lat,lon,depth\n2022-02-14T17:00:00,1,2,3"),
+            "test.json",
+        )
+    }
     response = client.post(
         "/upload", data=data, content_type="multipart/form-data"
     )
@@ -33,7 +38,14 @@ def test_upload_file(client):
     assert response.status_code == 200
 
     data = DataFile.query.one()
-    assert data.json_body == '{"key": 3}'
+    assert json.loads(data.json_body) == [
+        {
+            "timestamp": "2022-02-14T17:00:00",
+            "lat": "1",
+            "lon": "2",
+            "depth": "3",
+        }
+    ]
 
 
 def test_get_file(client):

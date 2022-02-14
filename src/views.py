@@ -1,3 +1,4 @@
+import csv
 import json
 import logging
 import secrets
@@ -34,15 +35,31 @@ def get_file(file_id):
 def upload_file():
     data = request.files["json_file"]
     try:
-        # TODO: Validate that the field structure matches expectations
         data_str = data.read().decode("utf-8")
-        json.loads(data_str)
-    except json.JSONDecodeError:
+        csv_reader = csv.reader(data_str.split("\n"))
+        fields = next(csv_reader)
+        if set(fields) != {"timestamp", "lon", "lat", "depth"}:
+            return render_template("upload_failure.html"), 400
+
+        fields_by_index = {}
+        for index, field in enumerate(fields):
+            fields_by_index[index] = field
+
+        data = []
+        for row in csv_reader:
+            row_json = {}
+            for index, value in enumerate(row):
+                # TODO: Validate the values
+                field_name = fields_by_index[index]
+                row_json[field_name] = value
+            data.append(row_json)
+
+    except (UnicodeDecodeError):
         logging.exception("JSON decode error on file upload")
         return render_template("upload_failure.html"), 400
 
     data_file = DataFile(
-        json_body=data_str, secret_token=secrets.token_urlsafe()
+        json_body=json.dumps(data), secret_token=secrets.token_urlsafe()
     )
     db.session.add(data_file)
     db.session.commit()
