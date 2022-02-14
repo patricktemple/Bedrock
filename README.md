@@ -43,7 +43,7 @@ pytest -vs
 ```
 
 ## Formatting
-Run `fourmat` to autoformat the Python code.
+Run `fourmat fix` to autoformat the Python code.
 
 ## Deploy
 This runs on Elastic Beanstalk. You'll need to have your environment configured
