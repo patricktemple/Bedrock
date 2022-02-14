@@ -3,7 +3,7 @@ from .app import app
 
 from werkzeug import exceptions
 
-from flask import render_template, request
+from flask import render_template, request, jsonify
 import secrets
 
 from .models import DataFile, db
@@ -24,10 +24,12 @@ def home():
 @app.route("/file/<uuid:file_id>", methods=["GET"])
 def get_file(file_id):
     data_file = DataFile.query.get(file_id)
-    if data_file.secret_token != request.args.get('secret_token'):
+    if data_file.secret_token != request.args.get('token'):
         raise exceptions.Forbidden()
-    # TODO: content type
-    return data_file.json_body
+    return app.response_class(
+        response=data_file.json_body,
+        mimetype='application/json'
+    )
 
 
 @app.route("/upload", methods=["POST"])
