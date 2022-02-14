@@ -9,7 +9,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Limit giant files
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024
 
 logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",

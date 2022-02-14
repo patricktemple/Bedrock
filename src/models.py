@@ -1,12 +1,11 @@
+from uuid import uuid4
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Text, TypeDecorator
-from sqlalchemy.dialects.postgresql import TIMESTAMP as _TIMESTAMP
-from sqlalchemy.dialects.postgresql import UUID as _UUID
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import UUID as _UUID
 
 from .app import app
-
-from uuid import uuid4
 
 db = SQLAlchemy(app)
 
