@@ -36,7 +36,7 @@ def upload_file():
     data = request.files["json_file"]
     try:
         data_str = data.read().decode("utf-8")
-        csv_reader = csv.reader(data_str.split("\n"))
+        csv_reader = csv.reader(data_str.split("\n"), skipinitialspace=True)
         fields = next(csv_reader)
         if set(fields) != {"timestamp", "lon", "lat", "depth"}:
             return render_template("upload_failure.html"), 400
